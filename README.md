@@ -10,12 +10,18 @@ An iOS Shortcut fires a POST request after each payment. This server receives th
 
 ### 1. Configure users and categories
 
-Edit `config.yml`:
+Copy the example config and fill in your real values:
+
+```bash
+cp config.yml config.local.yml
+```
+
+Edit `config.local.yml` with your actual username and API key:
 
 ```yaml
 users:
-  - username: vhamed32
-    api_key: A5cYxrU6yvHKaWrQ4mYc
+  - username: your_username
+    api_key: your_secret_api_key
 
 categories:
   Groceries:
@@ -30,17 +36,25 @@ storage:
   data_dir: ./data
 ```
 
+`config.local.yml` is gitignored and never committed. `config.yml` is the template.
+
 ### 2. Run
 
 ```bash
 go run main.go
 ```
 
+To use your local config explicitly:
+
+```bash
+CONFIG_PATH=config.local.yml go run main.go
+```
+
 Or build and run:
 
 ```bash
 go build -o wallet-automation .
-./wallet-automation
+CONFIG_PATH=config.local.yml ./wallet-automation
 ```
 
 ### Environment Variables
