@@ -45,6 +45,7 @@ func main() {
 	app.Use(recover.New())
 	app.Use(logger.New())
 
+	app.Get("/", handler.Home)
 	app.Post("/record/", recordHandler.Handle)
 	app.Post("/record", recordHandler.Handle)
 
