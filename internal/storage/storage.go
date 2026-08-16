@@ -9,14 +9,12 @@ import (
 )
 
 type Transaction struct {
-	ID          string    `json:"id"`
-	Amount      string    `json:"amount"`
-	Transaction string    `json:"transaction"`
-	Card        string    `json:"card"`
-	Name        string    `json:"name"`
-	Merchant    string    `json:"merchant"`
-	Category    string    `json:"category"`
-	RecordedAt  time.Time `json:"recorded_at"`
+	ID         string    `json:"id"`
+	Amount     string    `json:"amount"`
+	Card       string    `json:"card"`
+	Merchant   string    `json:"merchant"`
+	Category   string    `json:"category"`
+	RecordedAt time.Time `json:"recorded_at"`
 }
 
 type UserStore struct {
@@ -81,6 +79,12 @@ func (s *Storage) write(username string, store UserStore) error {
 	enc := json.NewEncoder(f)
 	enc.SetIndent("", "  ")
 	return enc.Encode(store)
+}
+
+func (s *Storage) Read(username string) (UserStore, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.load(username)
 }
 
 func (s *Storage) filePath(username string) string {

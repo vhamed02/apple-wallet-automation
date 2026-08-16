@@ -11,11 +11,9 @@ import (
 )
 
 type RecordRequest struct {
-	Amount      string `json:"amount"`
-	Transaction string `json:"transaction"`
-	Card        string `json:"card"`
-	Name        string `json:"name"`
-	Merchant    string `json:"merchant"`
+	Amount   string `json:"amount"`
+	Card     string `json:"card"`
+	Merchant string `json:"merchant"`
 }
 
 type RecordHandler struct {
@@ -59,14 +57,12 @@ func (h *RecordHandler) Handle(c *fiber.Ctx) error {
 	category := h.categorizer.Categorize(req.Merchant)
 
 	tx := storage.Transaction{
-		ID:          uuid.New().String(),
-		Amount:      req.Amount,
-		Transaction: req.Transaction,
-		Card:        req.Card,
-		Name:        req.Name,
-		Merchant:    req.Merchant,
-		Category:    category,
-		RecordedAt:  time.Now().UTC(),
+		ID:         uuid.New().String(),
+		Amount:     req.Amount,
+		Card:       req.Card,
+		Merchant:   req.Merchant,
+		Category:   category,
+		RecordedAt: time.Now().UTC(),
 	}
 
 	if err := h.store.Save(user.Username, tx); err != nil {
