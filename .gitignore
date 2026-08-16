@@ -1,7 +1,6 @@
 data/
 *.env
 .env
-config.local.yml
 credentials.yml
 wallet-automation-linux
 wallet-automation
