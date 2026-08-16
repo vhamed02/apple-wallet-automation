@@ -1,0 +1,147 @@
+users:
+  - username: vhamed32
+    api_key: your_api_key_here
+
+categories:
+  Groceries:
+    - yerevan city
+    - carrefour
+    - walmart
+    - whole foods
+    - trader joe
+    - aldi
+    - lidl
+    - tesco
+    - spar
+    - kroger
+    - costco
+    - target
+    - supermarket
+    - mini market
+    - grocery
+    - market
+
+  Restaurant:
+    - kfc
+    - mcdonald
+    - burger king
+    - subway
+    - pizza hut
+    - domino
+    - starbucks
+    - cafe
+    - restaurant
+    - bistro
+    - grill
+    - sushi
+    - wingstop
+    - chipotle
+    - taco bell
+    - popeyes
+    - wendy
+    - five guys
+    - noodle
+    - diner
+    - eatery
+    - kebab
+    - shawarma
+
+  Transport:
+    - uber
+    - lyft
+    - taxi
+    - bolt
+    - yandex taxi
+    - metro
+    - subway transit
+    - bus
+    - train
+    - airline
+    - airways
+    - airport
+    - parking
+    - toll
+    - fuel
+    - petrol
+    - gas station
+    - shell
+    - bp
+    - chevron
+
+  Shopping:
+    - amazon
+    - ebay
+    - zara
+    - h&m
+    - nike
+    - adidas
+    - apple store
+    - bestbuy
+    - ikea
+    - primark
+    - uniqlo
+    - mango
+    - gap
+    - forever 21
+    - fashion
+    - clothing
+    - boutique
+    - mall
+
+  Health:
+    - pharmacy
+    - drugstore
+    - cvs
+    - walgreens
+    - hospital
+    - clinic
+    - doctor
+    - dentist
+    - medical
+    - health
+    - fitness
+    - gym
+    - wellness
+
+  Entertainment:
+    - cinema
+    - movie
+    - netflix
+    - spotify
+    - steam
+    - playstation
+    - xbox
+    - game
+    - theater
+    - concert
+    - ticket
+    - amusement
+    - bowling
+    - escape room
+
+  Utilities:
+    - electric
+    - water
+    - internet
+    - telecom
+    - mobile
+    - vivo
+    - at&t
+    - verizon
+    - t-mobile
+    - bill payment
+    - utility
+
+  Travel:
+    - hotel
+    - hostel
+    - airbnb
+    - booking
+    - expedia
+    - resort
+    - motel
+    - inn
+    - lodging
+
+storage:
+  data_dir: ./data
