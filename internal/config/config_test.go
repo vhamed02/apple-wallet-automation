@@ -7,27 +7,21 @@ import (
 	"github.com/apple-wallet-automation/internal/config"
 )
 
-func writeTempConfig(t *testing.T, content string) string {
+func writeTempFile(t *testing.T, content string) string {
 	t.Helper()
-	f, err := os.CreateTemp(t.TempDir(), "config-*.yml")
+	f, err := os.CreateTemp(t.TempDir(), "*.yml")
 	if err != nil {
-		t.Fatalf("failed to create temp config: %v", err)
+		t.Fatalf("failed to create temp file: %v", err)
 	}
 	if _, err := f.WriteString(content); err != nil {
-		t.Fatalf("failed to write temp config: %v", err)
+		t.Fatalf("failed to write temp file: %v", err)
 	}
 	f.Close()
 	return f.Name()
 }
 
-func TestLoad_ValidConfig(t *testing.T) {
-	raw := `
-users:
-  - username: alice
-    api_key: key-alice
-  - username: bob
-    api_key: key-bob
-
+func validConfigYML() string {
+	return `
 categories:
   Groceries:
     - yerevan city
@@ -39,8 +33,23 @@ categories:
 storage:
   data_dir: ./data
 `
-	path := writeTempConfig(t, raw)
-	cfg, err := config.Load(path)
+}
+
+func validCredentialsYML() string {
+	return `
+users:
+  - username: alice
+    api_key: key-alice
+  - username: bob
+    api_key: key-bob
+`
+}
+
+func TestLoad_ValidConfig(t *testing.T) {
+	cfgPath := writeTempFile(t, validConfigYML())
+	credPath := writeTempFile(t, validCredentialsYML())
+
+	cfg, err := config.Load(cfgPath, credPath)
 	if err != nil {
 		t.Fatalf("Load() error: %v", err)
 	}
@@ -62,30 +71,45 @@ storage:
 	}
 }
 
-func TestLoad_FileNotFound(t *testing.T) {
-	_, err := config.Load("/nonexistent/path/config.yml")
+func TestLoad_ConfigFileNotFound(t *testing.T) {
+	credPath := writeTempFile(t, validCredentialsYML())
+	_, err := config.Load("/nonexistent/config.yml", credPath)
 	if err == nil {
-		t.Error("expected error for missing file, got nil")
+		t.Error("expected error for missing config file, got nil")
 	}
 }
 
-func TestLoad_InvalidYAML(t *testing.T) {
-	path := writeTempConfig(t, "key: [unclosed bracket")
-	_, err := config.Load(path)
+func TestLoad_CredentialsFileNotFound(t *testing.T) {
+	cfgPath := writeTempFile(t, validConfigYML())
+	_, err := config.Load(cfgPath, "/nonexistent/credentials.yml")
 	if err == nil {
-		t.Error("expected error for invalid YAML, got nil")
+		t.Error("expected error for missing credentials file, got nil")
+	}
+}
+
+func TestLoad_InvalidConfigYAML(t *testing.T) {
+	cfgPath := writeTempFile(t, "key: [unclosed bracket")
+	credPath := writeTempFile(t, validCredentialsYML())
+	_, err := config.Load(cfgPath, credPath)
+	if err == nil {
+		t.Error("expected error for invalid config YAML, got nil")
+	}
+}
+
+func TestLoad_InvalidCredentialsYAML(t *testing.T) {
+	cfgPath := writeTempFile(t, validConfigYML())
+	credPath := writeTempFile(t, "key: [unclosed bracket")
+	_, err := config.Load(cfgPath, credPath)
+	if err == nil {
+		t.Error("expected error for invalid credentials YAML, got nil")
 	}
 }
 
 func TestFindUserByAPIKey_Found(t *testing.T) {
-	raw := `
-users:
-  - username: alice
-    api_key: key-alice
-storage:
-  data_dir: ./data
-`
-	cfg, _ := config.Load(writeTempConfig(t, raw))
+	cfg, _ := config.Load(
+		writeTempFile(t, validConfigYML()),
+		writeTempFile(t, validCredentialsYML()),
+	)
 
 	user, ok := cfg.FindUserByAPIKey("key-alice")
 	if !ok {
@@ -97,14 +121,10 @@ storage:
 }
 
 func TestFindUserByAPIKey_NotFound(t *testing.T) {
-	raw := `
-users:
-  - username: alice
-    api_key: key-alice
-storage:
-  data_dir: ./data
-`
-	cfg, _ := config.Load(writeTempConfig(t, raw))
+	cfg, _ := config.Load(
+		writeTempFile(t, validConfigYML()),
+		writeTempFile(t, validCredentialsYML()),
+	)
 
 	_, ok := cfg.FindUserByAPIKey("wrong-key")
 	if ok {
@@ -113,14 +133,10 @@ storage:
 }
 
 func TestFindUserByAPIKey_EmptyKey(t *testing.T) {
-	raw := `
-users:
-  - username: alice
-    api_key: key-alice
-storage:
-  data_dir: ./data
-`
-	cfg, _ := config.Load(writeTempConfig(t, raw))
+	cfg, _ := config.Load(
+		writeTempFile(t, validConfigYML()),
+		writeTempFile(t, validCredentialsYML()),
+	)
 
 	_, ok := cfg.FindUserByAPIKey("")
 	if ok {

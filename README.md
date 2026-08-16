@@ -8,35 +8,23 @@ An iOS Shortcut fires a POST request after each payment. This server receives th
 
 ## Setup
 
-### 1. Configure users and categories
+### 1. Create your credentials file
 
-Copy the example config and fill in your real values:
+Copy the example and fill in your real values:
 
 ```bash
-cp config.yml config.local.yml
+cp credentials.example.yml credentials.yml
 ```
 
-Edit `config.local.yml` with your actual username and API key:
+Edit `credentials.yml`:
 
 ```yaml
 users:
   - username: your_username
     api_key: your_secret_api_key
-
-categories:
-  Groceries:
-    - yerevan city
-    - carrefour
-  Restaurant:
-    - kfc
-    - starbucks
-  # ... add more
-
-storage:
-  data_dir: ./data
 ```
 
-`config.local.yml` is gitignored and never committed. `config.yml` is the template.
+`credentials.yml` is gitignored and never committed. `credentials.example.yml` is the committed template.
 
 ### 2. Run
 
@@ -44,25 +32,26 @@ storage:
 go run main.go
 ```
 
-To use your local config explicitly:
+Override file paths via env vars if needed:
 
 ```bash
-CONFIG_PATH=config.local.yml go run main.go
+CONFIG_PATH=config.yml CREDENTIALS_PATH=credentials.yml go run main.go
 ```
 
 Or build and run:
 
 ```bash
 go build -o wallet-automation .
-CONFIG_PATH=config.local.yml ./wallet-automation
+./wallet-automation
 ```
 
 ### Environment Variables
 
-| Variable      | Default       | Description                  |
-|---------------|---------------|------------------------------|
-| `PORT`        | `3000`        | HTTP port to listen on       |
-| `CONFIG_PATH` | `config.yml`  | Path to config file          |
+| Variable            | Default              | Description                      |
+|---------------------|----------------------|----------------------------------|
+| `PORT`              | `3000`               | HTTP port to listen on           |
+| `CONFIG_PATH`       | `config.yml`         | Path to main config file         |
+| `CREDENTIALS_PATH`  | `credentials.yml`    | Path to credentials file         |
 
 ## API
 

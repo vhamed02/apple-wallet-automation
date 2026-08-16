@@ -19,7 +19,12 @@ func main() {
 		configPath = "config.yml"
 	}
 
-	cfg, err := config.Load(configPath)
+	credentialsPath := os.Getenv("CREDENTIALS_PATH")
+	if credentialsPath == "" {
+		credentialsPath = "credentials.yml"
+	}
+
+	cfg, err := config.Load(configPath, credentialsPath)
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
